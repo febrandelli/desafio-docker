@@ -27,8 +27,6 @@ services:
       - mongo_express_network
     depends_on:
       - mongo_db
-    links:
-      - mongo_db
     environment:
       ME_CONFIG_MONGODB_SERVER: mongo_db
       ME_CONFIG_MONGODB_PORT: 27017
