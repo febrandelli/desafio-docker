@@ -1,0 +1,39 @@
+version: '3.8'
+
+volumes:
+  mongo_vol:
+
+networks:
+  mongo_express_network:
+    driver: bridge
+
+services:
+  mongo_db:
+    image: mongo:4.4.3
+    networks:
+      - mongo_express_network
+    volumes:
+      - mongo_vol:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user_mongo
+      MONGO_INITDB_ROOT_PASSWORD: pwd_mongo
+  
+    
+  mongo-express:
+    image: mongo-express:0.54.0
+    ports:
+      - 8081:8081
+    networks:
+      - mongo_express_network
+    depends_on:
+      - mongo_db
+    links:
+      - mongo_db
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo_db
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: pwd
+      ME_CONFIG_MONGODB_ADMINUSERNAME: user_mongo
+      ME_CONFIG_MONGODB_ADMINPASSWORD: pwd_mongo
+
