@@ -1,0 +1,28 @@
+version: '3.8'
+
+volumes:
+  redis_vol:
+
+networks:
+  redis_network:
+    driver: bridge
+
+services:
+  redis_db:
+    image: redis:7.0.4
+    networks:
+      - redis_network
+    volumes:
+      - redis_vol:/data
+      
+  commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - 8081:8081
+    networks:
+      - redis_network
+    restart: always
+    environment:
+      REDIS_HOSTS: local:redis_db:6379
+
+      
