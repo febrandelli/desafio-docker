@@ -1,0 +1,39 @@
+version: '3.8'
+
+volumes:
+  wordpress_vol:
+  mysql_vol:
+
+networks:
+  wordpress_network:
+
+services:
+  wordpress:
+    image: wordpress:php8.0
+    volumes:
+      - wordpress_vol:/var/www/html
+    networks:
+      - wordpress_network
+    ports:
+      - 8080:80
+    depends_on:
+      - mysql_db
+    environment:
+      WORDPRESS_DB_HOST: mysql_db
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_pwd
+      WORDPRESS_DB_NAME: wp_db
+  
+  mysql_db:
+    image: mysql:5.7
+    volumes:
+      - mysql_vol:/var/lib/mysql
+    networks:
+      - wordpress_network
+    environment:
+      MYSQL_DATABASE: wp_db
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_pwd
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    
+      
